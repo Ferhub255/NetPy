@@ -17,8 +17,8 @@ import sys
 device = {
 	'device_type':'cisco_ios',
 	'ip':'',
-	'username':'Dimatel',
-	'password':'Bg2019',
+	'username':'user',
+	'password':'password',
 }
 
 
