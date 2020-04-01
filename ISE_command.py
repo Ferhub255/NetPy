@@ -5,7 +5,7 @@ Autor: Carlos Fernando Tapia Vaca <fernando.tapiavaca@yandex.com>
 
 	ISE_command.py
 	Este script esta diseñado para automatizar la configuraciones de comandos en los todos
-	los switches de acceso del Banco Ganadero. Identifica que interfaces tienen Dot1x, luego
+	los switches de acceso de la red X. Identifica que interfaces tienen Dot1x, luego
 	identifica las vlanes asignadas a cada puerto e identifica si es de acceso o de voz
 	luego genera el template para todas las interfaces del switch con jinja2.
 
@@ -15,8 +15,7 @@ Autor: Carlos Fernando Tapia Vaca <fernando.tapiavaca@yandex.com>
 		-jinja2
 		-re (regex)
 		-ntc-templates
-		-git (https://gitforwindows.org/)(https://www.develves.net/blogs/asd/articles/using-git-with-powershell-on-windows-10/)
-		-python -m pip install [package]
+		-git 
 
 Ultima revision 31-03-2020 15:00 Santa Cruz de la Sierra - Bolivia
 """
@@ -31,8 +30,8 @@ import jinja2
 device = {
 	'device_type':'cisco_ios',
 	'ip':'',
-	'username':"Dimatel",
-	'password':"D6CaT4$lK#p9",
+	'username':"user",
+	'password':"password",
 	}
 fallidos=""#direcciones ip de los SW fallidos
 
