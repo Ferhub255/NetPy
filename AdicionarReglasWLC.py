@@ -19,8 +19,8 @@ import sys
 device = {
 	'device_type':'cisco_wlc',
 	'ip':'172.16.10.3',
-	'username':'Dimatel',
-	'password':'Bg2019',
+	'username':'user',
+	'password':'password',
 }
 permit=" permit"
 deny=" deny"
