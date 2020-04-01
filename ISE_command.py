@@ -5,7 +5,7 @@ Autor: Carlos Fernando Tapia Vaca <fernando.tapiavaca@yandex.com>
 
 	ISE_command.py
 	Este script esta diseñado para automatizar la configuraciones de comandos en los todos
-	los switches de acceso del Banco Ganadero. Identifica que interfaces tienen Dot1x, luego
+	los switches de acceso del ############. Identifica que interfaces tienen Dot1x, luego
 	identifica las vlanes asignadas a cada puerto e identifica si es de acceso o de voz
 	luego genera el template para todas las interfaces del switch con jinja2.
 
