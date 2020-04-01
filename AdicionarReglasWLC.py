@@ -5,8 +5,8 @@ Autor: Carlos Fernando Tapia Vaca <fernando.tapiavaca@yandex.com>
 
 	AdicionarReglasWLC.py
 	Este script de proposito especifico para adicionar reglas a los perfiles ya creados
-    en el WLC del Bg.
-    WLC cisco_wlc.
+    	en el WLC cisco_wlc.
+	
 Ultima revision 05-09-2019 11:40 Santa Cruz de la Sierra - Bolivia
 """
 ##########################################################
