@@ -31,8 +31,8 @@ import jinja2
 device = {
 	'device_type':'cisco_ios',
 	'ip':'',
-	'username':"Dimatel",
-	'password':"D6CaT4$lK#p9",
+	'username':"user",
+	'password':"password",
 	}
 fallidos=""#direcciones ip de los SW fallidos
 
