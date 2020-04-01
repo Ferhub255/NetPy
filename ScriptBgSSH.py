@@ -5,7 +5,7 @@ Autor: Carlos Fernando Tapia Vaca <fernando.tapiavaca@yandex.com>
 
 	ScriptbgSSH.py
 	Este script esta diseñado para relevamiento de datos de Swiches con cisco_ios
-	pertenecientes al Cliente Bg.
+	pertenecientes al Cliente ############.
 Ultima revision 04-09-2019 11:30 Santa Cruz de la Sierra - Bolivia
 """
 
