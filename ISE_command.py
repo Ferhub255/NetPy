@@ -82,7 +82,6 @@ for dir in direcciones:
 
 	#asignamos la version
 	ios=re.search(r"(^..)", version[0]['version']).group(1)
-	#pprint(Variables)
 
 	#se lee el template generico y se carga en una variable a jinja2
 	template_file = 'template.j2'
