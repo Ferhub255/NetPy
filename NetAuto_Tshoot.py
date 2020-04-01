@@ -1,15 +1,20 @@
 #!/usr/bin/env python3
 """
-Automatizacion de Troubleshooting red
+Automatizacion de Troubleshooting de red
 Autor: Carlos Fernando Tapia Vaca <fernando.tapiavaca@yandex.com>
 
-	Netauto_Tshoot.py
+	Tshoot_ISE.py
 	Este script esta diseñado para automatizar tareas de Troubleshooting con Servidor Cisco ISE,
 	Tiene la habilidad de abrir/cerrar puertos, Eliminar/agrega/reiniciar servicio 802.1x,
 	consultar estado de la autenticacion entre otros.
-	Esta orientado para uso de personal de mesa de ayuda del Banco Ganadero.
+	Esta orientado para uso de personal de mesa de ayuda de ###############.
 
-Ultima revision 02-03-2020 14:57 Santa Cruz de la Sierra - Bolivia
+	Requerimientos:
+		-python 3
+		-netmiko
+		-openpyxl
+
+Ultima revision 12-03-2020 17:40 Santa Cruz de la Sierra - Bolivia
 """
 
 #Librerias
@@ -18,13 +23,14 @@ import netmiko
 import datetime
 import sys
 from openpyxl import load_workbook
+from getpass import getpass
 
 #Variables
 device = {
 	'device_type':'cisco_ios',
 	'ip':'',
-	'username':"Dimatel",
-	'password':"%13+@M&d-SW2960S-SC-2#",
+	'username':"",
+	'password':"",
 	}
 Switch = {
 	'Nombre':'Null',
@@ -32,12 +38,13 @@ Switch = {
 	'Puerto':'Null',
 	}
 Estado="DESCONECTADO"
+State=False
 path="DataBase.xlsx"
 sheet="SWITCH"
 Dicccionario={}
 Lista=[]
 
-print("\n---->Net_Tshoot ha iniciado: \n")
+print("\n--->Tshoot_ISE ha iniciado: \n")
 
 
 
@@ -49,21 +56,20 @@ def Imprimir_Menu():
 	print("Operaciones:")
 	print("\n")
 	print("ESTADO: " + Estado)
-	print(" 0) Conectar")
-	print("--------> PUERTO <--------")
-	print(" 1) Modo Abierto")
-	print(" 2) Modo Cerrado")
-	print(" 3) Apagar")
-	print(" 4) Encender")
-	print("--------> RADIUS <--------")
-	print(" 5) Mostrar Estado")
-	print(" 6) Eliminar Radius")
-	print(" 7) Agregar Radius")
-	print(" 8) Reiniciar")
-	print("------> PARAMETROS <------")
-	print(" 9) Mostrar")
-	print("10) Insertar")
+	print(" 0) Conectar a Switch y Puerto")
+	print(" 1) Mostrar Informacion de Conexion")
+	print("-------> PUERTO <--------")
+	print(" 2) Modo Abierto")
+	print(" 3) Modo Cerrado")
+	print(" 4) Apagar")
+	print(" 5) Encender")
+	print(" 6) Mostrar Configuracion del Puerto")
+	print("-------> AUTENTICACION <-------")
+	print(" 7) Mostrar Estado de Autenticacion")
+	print(" 8) Deshabilitar Autenticacion")
+	print(" 9) Habilitar Autenticacion")
 	print("\n")
+	print("10) Guardar Configuracion")
 	print("11) Salir")
 	print("\n")
 
@@ -80,25 +86,8 @@ def Seleccion_Opcion():
 		print("Error: Wrong Input")
 		return('E')
 
-def Conectar():
-	try:
-		net_connect = ConnectHandler(**device)
-		print(net_connect.find_prompt())
-		print("\n")
-		print("Conexion Exitosa!")
-		Estado="CONECTADO A "+Switch['Nombre']
-		print(Estado)
-	except:
-		print("\n")
-		print("*****************************************************")
-		print(" Conexion Fallida! ")
-		Mostrar_Parametros()
-		print(device)
-		Estado="DESCONECTADO"
-		print("*****************************************************")
-
 def Salir():
-	if Estado!="DESCONECTADO":
+	if State==True:
 		net_connect.send_command("write")
 		net_connect.disconnect()
 		print("Desconectado")
@@ -113,6 +102,7 @@ def Mostrar_Parametros():
 	print("Puerto: "+Switch['Puerto'])
 	print("#####################################################")
 
+#carga los parametros de nombre,ip e interface
 def Insertar_Parametros():
 	print("\n")
 	print("Los parametros deben ser exactos para realizar las acciones.")
@@ -131,10 +121,13 @@ def Insertar_Parametros():
 	print("Ejemplo: Gigabitethernet0/2")
 	print("-----------------------------------------------------")
 	Switch['Puerto']= input("Ingresa Puerto: ")
+	device['username']=input("User: ")
+	device['password']=getpass()
 	Mostrar_Parametros()
 	print("Verifique Los Datos, si no es correcto vuelva a ingresar")
 	device['ip']=str(Switch['Ip'])
 
+#Lee las entradas del excel y las pasa al Dicccionario, la llave es el nombre del dispositivo y su valor a ip
 def Cargar_Base_de_Datos():
 	Workbook = load_workbook(path,read_only=True)
 	Worksheet= Workbook[sheet]
@@ -147,113 +140,147 @@ def Cargar_Base_de_Datos():
 	Lista=[]
 	#print(Dicccionario)
 
-def Desargar_Base_de_Datos():
-	Dicccionario={}
-
+#Retorna la ip de la lista donde esta alojada la base de datos, y elimina el /32 del final.
 def Buscar_IP(nombre):
 	try:
-		#eliminar /32
 		ip=Dicccionario[nombre]
 		return(ip[:-3])
-	except:
+	except Exception as err:
+		print(err.args)
 		return("0.0.0.0")
 
 
 ################################################################################
+#Aqui inicia el script
 try:
 	Cargar_Base_de_Datos()
-except:
+except Exception as err:
+	print(err.args)
 	print("Error al Cargar la Base de Datos, Verificar parametros.")
 
+
+Imprimir_Menu()
 while True:
-	Imprimir_Menu()
+	#Imprimir_Menu()
 	Opcion=Seleccion_Opcion()
-	if Opcion==0: #CONECTAR
+	if Opcion==0: #CONECTAR SWITCH PUERTO
+		Insertar_Parametros()
+		Imprimir_Menu()
 		try:
+			if State==True:
+				net_connect.send_command("write")
 			net_connect = ConnectHandler(**device)
-			#print(net_connect.find_prompt())
 			net_connect.enable()
 			print("\n")
-			print("Conexion Exitosa!")
+			print("Conexion Exitosa!"+"\n" +str(datetime.datetime.now()))
 			Estado="CONECTADO A "+Switch['Nombre']
 			print(Estado)
-		except:
+			net_connect.send_command("terminal length 0")
+			State=True
+		except Exception as err:
 			print("\n")
 			print("*****************************************************")
 			print(" Conexion Fallida! ")
+			print(err.args)
 			Mostrar_Parametros()
-			print(device)
 			Estado="DESCONECTADO"
+			State=False
 			print("*****************************************************")
 
-	elif Opcion==1: #ABIERTO
+	elif Opcion==2: #ABIERTO
+		Imprimir_Menu()
 		try:
-			config_commands=['conf t','interface '+ Switch['Puerto'],'auth open','end']
+			config_commands=['interface '+ Switch['Puerto'],'auth open']
 			net_connect.send_config_set(config_commands)
-			print("Exito")
-		except:
-			print("Ocurrio un error, verifique los parametros y la conexion.")
-	elif Opcion==2: #CERRADO
-		try:
-			config_commands=['conf t','interface '+ Switch['Puerto'],'no auth open','end']
-			net_connect.send_config_set(config_commands)
-			print("Exito")
-		except:
+			print("Exito, MODO ABIERTO"+"\n" +str(datetime.datetime.now()))
+		except Exception as err:
+			print(err.args)
 			print("Ocurrio un error, verifique los parametros y la conexion.")
 
-	elif Opcion==3: #APAGAR
+	elif Opcion==3: #CERRADO
+		Imprimir_Menu()
 		try:
-			config_commands=['conf t','interface '+ Switch['Puerto'],'shut','end']
+			config_commands=['interface '+ Switch['Puerto'],'no auth open']
 			net_connect.send_config_set(config_commands)
-			print("Exito")
-		except:
+			print("Exito, MODO CERRADO"+"\n" +str(datetime.datetime.now()))
+		except Exception as err:
+			print(err.args)
 			print("Ocurrio un error, verifique los parametros y la conexion.")
 
-	elif Opcion==4: #ENCENDER
+	elif Opcion==4: #APAGAR
+		Imprimir_Menu()
 		try:
-			config_commands=['conf t','interface '+ Switch['Puerto'],'no shut','end']
+			config_commands=['interface '+ Switch['Puerto'],'shut']
 			net_connect.send_config_set(config_commands)
-			print("Exito")
-		except:
+			print("Exito, PUERTO APAGADO"+"\n" +str(datetime.datetime.now()))
+		except Exception as err:
+			print(err.args)
 			print("Ocurrio un error, verifique los parametros y la conexion.")
 
-	elif Opcion==5: #MOSTRAR ESTADO
+	elif Opcion==5: #ENCENDER
+		Imprimir_Menu()
+		try:
+			config_commands=['interface '+ Switch['Puerto'],'no shut']
+			net_connect.send_config_set(config_commands)
+			print("Exito, PUERTO ENCENDIDO"+"\n" +str(datetime.datetime.now()))
+		except Exception as err:
+			print(err.args)
+			print("Ocurrio un error, verifique los parametros y la conexion.")
+
+	elif Opcion==7: #MOSTRAR ESTADO
+		Imprimir_Menu()
+		try:
+			String="--More--"
+			output="\n----------------------------OUTPUT---------------------------\n"
+			output+=net_connect.send_command_timing("show auth session int "+Switch['Puerto'])
+			output+="\n"+net_connect.send_command_timing("show auth session int "+Switch['Puerto']+" detail")
+			print(output+"\n" +str(datetime.datetime.now()))
+		except Exception as err:
+			print(err.args)
+			print("Ocurrio un error, verifique los parametros y la conexion.")
+
+	elif Opcion==8: #ELIMINAR RADIUS
+		Imprimir_Menu()
+		try:
+			config_commands=['interface '+ Switch['Puerto'],'no auth port auto']
+			net_connect.send_config_set(config_commands)
+			print("Exito, PUERTO SIN AUTENTICACION"+"\n" +str(datetime.datetime.now()))
+		except Exception as err:
+			print(err.args)
+			print("Ocurrio un error, verifique los parametros y la conexion.")
+
+	elif Opcion==9: #AGREGAR RADIUS
+		Imprimir_Menu()
+		try:
+			config_commands=['interface '+ Switch['Puerto'],'auth port auto']
+			net_connect.send_config_set(config_commands)
+			print("Exito, EXITO PUERTO CON AUTENTICACION"+"\n" +str(datetime.datetime.now()))
+		except Exception as err:
+			print(err.args)
+			print("Ocurrio un error, verifique los parametros y la conexion.")
+
+	elif Opcion==1: #MOSTRAR
+		Imprimir_Menu()
+		Mostrar_Parametros()
+
+	elif Opcion==6: #MOSTRAR INFORMACION DE PUERTO
+		Imprimir_Menu()
 		try:
 			output="\n----------------------------OUTPUT---------------------------\n"
-			output+=net_connect.send_command("show auth session int "+Switch['Puerto'])
-			output+="\n"+net_connect.send_command("show auth session int "+Switch['Puerto']+" detail")
-			print(output)
-			print("Exito")
-		except:
+			output+=net_connect.send_command("show runn int "+Switch['Puerto'])
+			print(output+"\n" +str(datetime.datetime.now()))
+		except Exception as err:
+			print(err.args)
 			print("Ocurrio un error, verifique los parametros y la conexion.")
 
-	elif Opcion==6: #ELIMINAR RADIUS
+	elif Opcion==10:#GUARDAR LA CONFIGURACION
 		try:
-			config_commands=['conf t','interface '+ Switch['Puerto'],'no auth port auto','end']
-			net_connect.send_config_set(config_commands)
-			print("Exito")
-		except:
+			if State==True:
+				net_connect.send_command("write")
+				print("Se guardo correctamente "+"\n" +str(datetime.datetime.now()))
+		except Exception as err:
+			print(err.args)
 			print("Ocurrio un error, verifique los parametros y la conexion.")
 
-	elif Opcion==7: #AGREGAR RADIUS
-		try:
-			config_commands=['conf t','interface '+ Switch['Puerto'],'auth port auto','end']
-			net_connect.send_config_set(config_commands)
-			print("Exito")
-		except:
-			print("Ocurrio un error, verifique los parametros y la conexion.")
-
-	elif Opcion==8: #REINCIAR
-		try:
-			config_commands=['clear auth session int '+ Switch['Puerto']]
-			net_connect.send_config_set(config_commands)
-			print("Exito")
-		except:
-			print("Ocurrio un error, verifique los parametros y la conexion.")
-
-	elif Opcion==9: #MOSTRAR
-		Mostrar_Parametros()
-	elif Opcion==10: #INSERTAR
-		Insertar_Parametros()
-	elif Opcion==11: #SALIR
+	elif Opcion==11:#SALIR DEL SCRIPT
 		Salir()
