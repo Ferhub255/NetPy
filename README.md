@@ -2,7 +2,7 @@
 
 ## Description
 
-It is a repository of Scripts that I've been writing in python and using to automate configuration tasks on network equipment.
+*It is a repository of Scripts that I've been writing in python and using to automate configuration tasks on network equipment.*
 
 ## Author
 
