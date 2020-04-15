@@ -1,1 +1,11 @@
-# NetPy es un Repositorio de los Scripts que he estado escribiendo en python3 y utlizando para automatizar tareas de configuracion en equipos de redes.
+# NetPy 
+
+## Description
+
+It is a repository of Scripts that I've been writing in python and using to automate configuration tasks on network equipment.
+
+## Author
+
+[me](https://www.linkedin.com/in/cftv/?locale=en_US)
+
+
