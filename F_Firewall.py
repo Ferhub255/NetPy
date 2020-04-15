@@ -4,6 +4,7 @@ Autor: Carlos Fernando Tapia Vaca <fernando.tapiavaca@yandex.com>
 
 	firewall.py
 	Firewall Host-Based para un Servidor Linux distro Parrot.
+	
 Ultima revision 24-06-2017 11:30 Santa Cruz de la Sierra - Bolivia
 """
 
