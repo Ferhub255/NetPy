@@ -1,4 +1,4 @@
-# NetPy :robot:
+# NetPy  🐍
 
 ## Description
 
