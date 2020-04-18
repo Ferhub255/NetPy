@@ -14,8 +14,7 @@ Autor: Carlos Fernando Tapia Vaca <fernando.tapiavaca@yandex.com>
 		-netmiko
 		-jinja2
 		-re (regex)
-		-ntc-templates
-		-git 
+		-git clone https://github.com/networktocode/ntc-templates.git
 
 Ultima revision 31-03-2020 15:00 Santa Cruz de la Sierra - Bolivia
 """
@@ -100,12 +99,13 @@ for dir in direcciones:
 		command+="\n"+"tacacs server ISE01BG"+"\n"+"timeout 5"+"\n"+"tacacs server ISE02BG"+"\n"+"timeout 5"+"\n"
 	elif ios=="16":
 		command+="\n"+"tacacs server ISE01BG"+"\n"+"timeout 5"+"\n"+"tacacs server ISE02BG"+"\n"+"timeout 5"+"\n"
-	else:#si todo falla le metemos los 2
+	else:#si todo falla le agregamos los 2
 		command+="\n"+"tacacs-server timeout 5"+"\n"
 		command+="\n"+"tacacs server ISE01BG"+"\n"+"timeout 5"+"\n"+"tacacs server ISE02BG"+"\n"+"timeout 5"+"\n"
 
 	command=command.splitlines()
 	try:
+		#algunos switches tardaban en devolver el prompt lo que causaba un error, entonces no esperamos el prompt.
 		net_connect.send_config_set(command, cmd_verify=False)
 		net_connect.send_command("write")
 		print("Comandos Ingresados")
