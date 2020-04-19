@@ -140,7 +140,7 @@ for dir in direcciones:
     try:
         # algunos switches tardaban en devolver el prompt lo que causaba un error, entonces no esperamos el prompt.
         net_connect.send_config_set(command, cmd_verify=False)
-        net_connect.send_command("write")
+        net_connect.save_config()
         print("Comandos Ingresados")
         net_connect.disconnect()
         print("Desconectado Exitosamente")

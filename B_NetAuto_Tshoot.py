@@ -89,7 +89,7 @@ def Seleccion_Opcion():
 
 def Salir():
     if State == True:
-        net_connect.send_command("write")
+        net_connect.save_config()
         net_connect.disconnect()
         print("Desconectado")
     sys.exit()
@@ -173,7 +173,7 @@ while True:
         Imprimir_Menu()
         try:
             if State == True:
-                net_connect.send_command("write")
+                net_connect.save_config()
             net_connect = ConnectHandler(**device)
             net_connect.enable()
             print("\n")
@@ -291,7 +291,7 @@ while True:
     elif Opcion == 10:  # GUARDAR LA CONFIGURACION
         try:
             if State == True:
-                net_connect.send_command("write")
+                net_connect.save_config()
                 print("Se guardo correctamente " + "\n" + str(datetime.datetime.now()))
         except Exception as err:
             print(err.args)
