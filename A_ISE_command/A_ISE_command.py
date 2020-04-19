@@ -54,7 +54,7 @@ for dir in direcciones:
     except Exception as err:
         print(err.args)
         print("Conexion Fallida")
-        fallidos += "\n" + "Conexion Fallida: " + dir
+        fallidos += "\nConexion Fallida: {}".format(dir)
         continue
 
     # interfaces que tienen dot1x
@@ -67,7 +67,7 @@ for dir in direcciones:
     except Exception as err:
         print(err.args)
         print("Fallo de interface dot1x")
-        fallidos += "\n" + "Fallo Interface Dot1x: " + dir
+        fallidos += "\nFallo Interface Dot1x: {}".format(dir)
         continue
 
     # vlan asignadas a las interface
@@ -147,7 +147,7 @@ for dir in direcciones:
     except Exception as err:
         print(err.args)
         print(" Conexion Fallida, Comandos")
-        fallidos += "\n" + " Conexion Fallida, Comandos: " + dir
+        fallidos += "\nConexion Fallida, Comandos: {}".format(dir)
 
 file = open("Fallidos", "at")
 file.write(fallidos)
