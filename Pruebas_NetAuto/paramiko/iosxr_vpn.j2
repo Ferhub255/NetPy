@@ -1,8 +1,9 @@
 
 
-enable
-cisco
-configure terminal
+!enable
+!cisco
+!configure terminal
+
 {% for vrf in data['vrf'] %}
 vrf {{ vrf['name']}}
 description {{ vrf.description }}
@@ -16,5 +17,8 @@ export route-target
 {{ rt }}
 {% endfor %}
 {% endfor %}
-commit
-end
+
+!end
+!write
+
+do write
