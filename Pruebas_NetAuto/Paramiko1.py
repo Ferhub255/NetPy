@@ -12,7 +12,7 @@ def send_cmd(conn, command):
 
     conn.send(command + "\n")
     #Necesitamos esperar a que el esquipo responda
-    time.sleep(1.0)
+    time.sleep(5)
 
 def get_output(conn):
     """
@@ -26,8 +26,8 @@ def main():
     Inventory: IOS v15
     '''
     host_dict = {
-        "10.10.10.10": "show running-config | section vrf_definition",
-        "10.10.10.11": "show running-config vrf",
+        "192.168.0.201": "show running-config | section vrf_definition",
+        "192.168.0.202": "show running-config vrf",
     }
     #Para cada equipo hacemos un conexion y enciamos el comando
     for ip, vrf_command in host_dict.items():
@@ -49,13 +49,21 @@ def main():
         print(f"Entramos exitosamente a {get_output(conn).strip()}")
 
         commands = [
+            "enable",
+            "cisco",
             "terminal length 0",
             "show version | include Software",
             vrf_command,
         ]
-
+        output = ""
         for command in commands:
             send_cmd(conn, command)
-            print(get_output(conn))
-
+            output += get_output(conn)
         conn.close()
+
+        print(f"Writing {ip} facts to file")
+        with open(f"{ip}_facts.txt") as file:
+            file.write(output)
+
+if __name__ == "__main__":
+    main()
