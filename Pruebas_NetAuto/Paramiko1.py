@@ -26,9 +26,9 @@ def main():
     Inventory: IOS v15
     '''
     host_dict = {
-        "192.168.0.201": "show running-config | section vrf_definition",
+        "192.168.0.203": "show running-config | section vrf_definition",
         "192.168.0.202": "show running-config vrf",
-        "192.168.0.211": "show running-config"
+        "192.168.0.211": "show running-config",
     }
     #Para cada equipo hacemos un conexion y enciamos el comando
     for ip, vrf_command in host_dict.items():
@@ -38,11 +38,11 @@ def main():
         conn_params.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         conn_params.connect(
             hostname = ip,
-            port=22,
-            username="admin",
-            password="admin",
-            look_for_keys=False, # no buscar las llaves crypto
-            allow_agent=False, # no usar agentes locales SSH
+            port = 22,
+            username = "admin",
+            password = "admin",
+            look_for_keys = False, # no buscar las llaves crypto
+            allow_agent = False # no usar agentes locales SSH
         )
 
         conn = conn_params.invoke_shell()
@@ -64,7 +64,7 @@ def main():
         conn.close()
 
         print(f"Writing {ip} facts to file")
-        with open(f"{ip}_facts.txt", 'w') as file:
+        with open(f"facts/{ip}_facts.txt", 'w') as file:
             file.write(output)
 
 if __name__ == "__main__":

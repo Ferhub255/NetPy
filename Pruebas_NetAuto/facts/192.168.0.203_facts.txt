@@ -1,6 +1,7 @@
 enable
 Password: 
-R1#terminal length 0
-R1#show version | include Software
+R3#terminal length 0
+R3#show version | include Software
 Cisco IOS Software, IOSv Software (VIOS-ADVENTERPRISEK9-M), Version 15.6(2)T, RELEASE SOFTWARE (fc2)
-R1#show running-config | section vrf_definition
+R3#show running-config | section vrf_definition
+R3#

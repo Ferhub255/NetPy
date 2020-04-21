@@ -6,9 +6,7 @@ Cisco IOS Software, Linux Software (I86BI_LINUX-ADVENTERPRISEK9-M), Version 15.4
 R11#show running-config
 Building configuration...
 
-Current configuration : 3906 bytes
-!
-! Last configuration change at 03:18:36 UTC Tue Apr 21 2020
+Current configuration : 3844 bytes
 !
 version 15.4
 service timestamps debug datetime msec
