@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """
-Uso de Paramiko
+Uso de Netmiko
 """
 import time
 from netmiko import Netmiko
