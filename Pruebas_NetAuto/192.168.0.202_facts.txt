@@ -1,0 +1,12 @@
+enable
+Password: 
+R2#terminal length 0
+R2#show version | include Software
+Cisco IOS Software, IOSv Software (VIOS-ADVENTERPRISEK9-M), Version 15.6(2)T, RELEASE SOFTWARE (fc2)
+R2#show running-config vrf
+Building configuration...
+
+Current configuration : 5 bytes
+end
+
+R2#
