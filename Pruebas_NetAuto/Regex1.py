@@ -3,7 +3,7 @@
 Parsing text using Python re
 """
 import re
-
+from pprint import pprint
 
 def parse_model_ios(text):
     """
@@ -52,7 +52,65 @@ def parse_model_ios1215(text):
         return ios_version
     return None
 
+def parse_rt_ios(text):
+    '''
+    Extrae las variables de la configuracion y retorna un diccionario
+    '''
+    # lista de vfs
+    vrf_list = ["vrf"+ section for section in text.strip().split("vrf") if section]
+    return_dict = {}
+    
+    # Recorremos cada bloque de configuracion
+    for vrf in vrf_list:
+        # Se crea un diccionario de cada politica vrf
+        name_regex = re.compile(r"vrf\s+definition\s+(?P<name>\S+)\W?")
+        name_match = name_regex.search(vrf)
+        sub_dict = {}
+        vrf_dict = {name_match.group("name"):sub_dict}
+
+        rti_regex = re.compile(r"route-target\s+import\s+(?P<route_i>\d+:\d+)")
+        rti_match = rti_regex.findall(vrf)
+        sub_dict.update({"route_import": rti_match})
+
+        rte_regex = re.compile(r"route-target\s+export\s+(?P<route_e>\d+:\d+)")
+        rte_match = rte_regex.findall(vrf)
+        sub_dict.update({"route_export":rte_match})
+
+        return_dict.update(vrf_dict)
+    return return_dict
+        
+def parse_rt_iosxr(text):
+    vrf_list = ["vrf"+section for section in text.strip().split("vrf") if section]
+    return_dict = {}
+
+    for vrf in vrf_list:
+        #name
+        vrf_regex = re.compile(r"^vrf\s+(?P<name>\S+)")
+        vrf_match = vrf_regex.search(vrf)
+        sub_dict = {}
+        vrf_dict = {vrf_match.group("name"):sub_dict}
+
+        #import routes
+        rti_list = _get_iosxr_rt(r"import\s+route-target(.+?)!",vrf)
+        sub_dict.update({"route_import":rti_list})
+
+        #import routes
+        rte_list = _get_iosxr_rt(r"export\s+route-target(.+?)!",vrf)
+        sub_dict.update({"route_export":rte_list})
+
+        return_dict.update(vrf_dict)
+    return return_dict
+
+def _get_iosxr_rt(regex_str, vrf_str):
+    regex = re.compile(regex_str, re.DOTALL)
+    rt_matches = regex.findall(vrf_str, re.DOTALL)
+    if rt_matches:
+        rt_list = [ruta.strip() for ruta in rt_matches[0].strip().split("\n")]
+    else:
+        rt_list = []
+    return rt_list
+
 if __name__ == "__main__":
-    with open('facts/showIOS15','r') as file:
+    with open('facts/vrfxr_config','r') as file:
         output = file.read()
-    print(parse_model_ios1215(output))
+    pprint(parse_rt_iosxr(output))

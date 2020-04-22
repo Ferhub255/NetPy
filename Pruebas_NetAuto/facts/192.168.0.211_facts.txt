@@ -1,288 +1,537 @@
-enable
-Password: 
-R11#terminal length 0
-R11#show version | include Software
-Cisco IOS Software, Linux Software (I86BI_LINUX-ADVENTERPRISEK9-M), Version 15.4(1)T, DEVELOPMENT TEST SOFTWARE
-R11#show running-config
-Building configuration...
-
-Current configuration : 3844 bytes
-!
-version 15.4
-service timestamps debug datetime msec
-service timestamps log datetime msec
-no service password-encryption
-!
-hostname R11
-!
-boot-start-marker
-boot-end-marker
-!
-aqm-register-fnf
-!
-vrf definition CHEMICAL
- description CHEMICAL ENGINEERING FIRM
- rd 65000:2
- route-target export 65000:2
- route-target import 65000:2
- !
- address-family ipv4
- exit-address-family
- !
- address-family ipv6
- exit-address-family
-!
-vrf definition CHEM_MGMT
- description CHEMICAL ENGINEERING MANAGER
- rd 65000:3
- route-target export 65000:3
- route-target import 65000:4
- !
- address-family ipv4
- exit-address-family
- !
- address-family ipv6
- exit-address-family
-!
-vrf definition POLICE
- description POLICE DEPARTMENT
- rd 65000:1
- route-target export 65000:1
- route-target import 65000:1
- !
- address-family ipv4
- exit-address-family
- !
- address-family ipv6
- exit-address-family
-!
-enable secret 5 $1$N8Fk$kt.KU/b.d/usELVjP.tbb1
-!
-no aaa new-model
-mmi polling-interval 60
-no mmi auto-configure
-no mmi pvc
-mmi snmp-timeout 180
-no ip icmp rate-limit unreachable
-!
-!
-!
-!
-!
-!
-
-
-!
-!
-!
-!
-no ip domain lookup
-ip domain name home.lab
-ip cef
-no ipv6 cef
-!
-multilink bundle-name authenticated
-!
-!
-!
-!
-!
-!
-!
-!
-username admin secret 5 $1$Nben$4YaI/lYLdYK1.XA0Ivts4.
-!
-redundancy
-!
-!
-ip tcp mss 1400
-ip tcp synwait-time 5
-ip ssh logging events
-ip ssh version 2
-ip scp server enable
-! 
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-interface Loopback0
- ip address 192.168.1.1 255.255.255.255
- ip ospf 1 area 0
-!
-interface Loopback1
- description POLICE DEPARTMENT
- vrf forwarding POLICE
- ip address 10.0.1.1 255.255.255.255
-!
-interface Loopback2
- description CHEMICAL ENGINEERING FIRM
- vrf forwarding CHEMICAL
- ip address 10.0.2.1 255.255.255.255
-!
-interface Loopback3
- description CHEMICAL ENGINEERING MANAGER
- vrf forwarding CHEM_MGMT
- ip address 10.0.3.1 255.255.255.255
-!
-interface Tunnel13
- description R1 TO R3
- ip address 192.168.13.1 255.255.255.0
- ip ospf 1 area 0
- mpls ip
- tunnel destination 10.125.0.83
-!
-interface Ethernet0/0
- ip address 192.168.0.211 255.255.255.0
-!
-interface Ethernet0/1
- no ip address
- shutdown
-!
-interface Ethernet0/2
- no ip address
- shutdown
-!
-interface Ethernet0/3
- no ip address
- shutdown
-!
-interface Ethernet1/0
- no ip address
- shutdown
-!
-interface Ethernet1/1
- no ip address
- shutdown
-!
-interface Ethernet1/2
- no ip address
- shutdown
-!
-interface Ethernet1/3
- no ip address
- shutdown
-!
-interface Serial2/0
- no ip address
- shutdown
- serial restart-delay 0
-!
-interface Serial2/1
- no ip address
- shutdown
- serial restart-delay 0
-!
-interface Serial2/2
- no ip address
- shutdown
- serial restart-delay 0
-!
-interface Serial2/3
- no ip address
- shutdown
- serial restart-delay 0
-!
-interface Serial3/0
- no ip address
- shutdown
- serial restart-delay 0
-!
-interface Serial3/1
- no ip address
- shutdown
- serial restart-delay 0
-!
-interface Serial3/2
- no ip address
- shutdown
- serial restart-delay 0
-!
-interface Serial3/3
- no ip address
- shutdown
- serial restart-delay 0
-!
-router ospf 1
- router-id 0.0.0.1
-!
-router bgp 65000
- bgp log-neighbor-changes
- !
- scope global
-  neighbor 0.0.0.2 remote-as 65000
-  neighbor 0.0.0.2 update-source Loopback0
-  !
-  address-family ipv4
-  !
-  !
-  address-family vpnv4
-   neighbor 0.0.0.2 activate
-   neighbor 0.0.0.2 send-community extended
-  !
- !
- !
- scope vrf CHEMICAL
-  !
-  address-family ipv4
-   redistribute connected
-  !
- !
- !
- scope vrf CHEM_MGMT
-  !
-  address-family ipv4
-   redistribute connected
-  !
- !
- !
- scope vrf POLICE
-  !
-  address-family ipv4
-   redistribute connected
-  !
- !
-!
-ip forward-protocol nd
-!
-!
-no ip http server
-no ip http secure-server
-!
-!
-!
-mpls ldp router-id Loopback0
-!
-control-plane
-!
-!
-!
-!
-!
-!
-!
-!
-line con 0
- exec-timeout 0 0
- privilege level 15
- logging synchronous
-line aux 0
- exec-timeout 0 0
- privilege level 15
- logging synchronous
-line vty 0 4
- exec-timeout 0 0
- login local
- transport input ssh
-!
-!
-end
-
+enable
+
+Password: 
+
+R11#terminal length 0
+
+R11#show version | include Software
+
+Cisco IOS Software, Linux Software (I86BI_LINUX-ADVENTERPRISEK9-M), Version 15.4(1)T, DEVELOPMENT TEST SOFTWARE
+
+R11#show running-config
+
+Building configuration...
+
+
+
+Current configuration : 3844 bytes
+
+!
+
+version 15.4
+
+service timestamps debug datetime msec
+
+service timestamps log datetime msec
+
+no service password-encryption
+
+!
+
+hostname R11
+
+!
+
+boot-start-marker
+
+boot-end-marker
+
+!
+
+aqm-register-fnf
+
+!
+
+vrf definition CHEMICAL
+ description CHEMICAL ENGINEERING FIRM
+ rd 65000:2
+ route-target export 65000:2
+ route-target import 65000:2
+
+vrf definition CHEM_MGMT
+ description CHEMICAL ENGINEERING MANAGER
+ rd 65000:3
+ route-target export 65000:3
+  route-target export 65000:9
+ route-target import 65000:4
+
+vrf definition POLICE
+ description POLICE DEPARTMENT
+ rd 65000:1
+ route-target export 65000:1
+ route-target import 65000:1
+ route-target import 65000:2
+
+ !
+
+ address-family ipv4
+
+ exit-address-family
+
+ !
+
+ address-family ipv6
+
+ exit-address-family
+
+!
+
+enable secret 5 $1$N8Fk$kt.KU/b.d/usELVjP.tbb1
+
+!
+
+no aaa new-model
+
+mmi polling-interval 60
+
+no mmi auto-configure
+
+no mmi pvc
+
+mmi snmp-timeout 180
+
+no ip icmp rate-limit unreachable
+
+!
+
+!
+
+!
+
+!
+
+!
+
+!
+
+
+
+
+
+!
+
+!
+
+!
+
+!
+
+no ip domain lookup
+
+ip domain name home.lab
+
+ip cef
+
+no ipv6 cef
+
+!
+
+multilink bundle-name authenticated
+
+!
+
+!
+
+!
+
+!
+
+!
+
+!
+
+!
+
+!
+
+username admin secret 5 $1$Nben$4YaI/lYLdYK1.XA0Ivts4.
+
+!
+
+redundancy
+
+!
+
+!
+
+ip tcp mss 1400
+
+ip tcp synwait-time 5
+
+ip ssh logging events
+
+ip ssh version 2
+
+ip scp server enable
+
+! 
+
+!
+
+!
+
+!
+
+!
+
+!
+
+!
+
+!
+
+!
+
+!
+
+!
+
+!
+
+!
+
+interface Loopback0
+
+ ip address 192.168.1.1 255.255.255.255
+
+ ip ospf 1 area 0
+
+!
+
+interface Loopback1
+
+ description POLICE DEPARTMENT
+
+ vrf forwarding POLICE
+
+ ip address 10.0.1.1 255.255.255.255
+
+!
+
+interface Loopback2
+
+ description CHEMICAL ENGINEERING FIRM
+
+ vrf forwarding CHEMICAL
+
+ ip address 10.0.2.1 255.255.255.255
+
+!
+
+interface Loopback3
+
+ description CHEMICAL ENGINEERING MANAGER
+
+ vrf forwarding CHEM_MGMT
+
+ ip address 10.0.3.1 255.255.255.255
+
+!
+
+interface Tunnel13
+
+ description R1 TO R3
+
+ ip address 192.168.13.1 255.255.255.0
+
+ ip ospf 1 area 0
+
+ mpls ip
+
+ tunnel destination 10.125.0.83
+
+!
+
+interface Ethernet0/0
+
+ ip address 192.168.0.211 255.255.255.0
+
+!
+
+interface Ethernet0/1
+
+ no ip address
+
+ shutdown
+
+!
+
+interface Ethernet0/2
+
+ no ip address
+
+ shutdown
+
+!
+
+interface Ethernet0/3
+
+ no ip address
+
+ shutdown
+
+!
+
+interface Ethernet1/0
+
+ no ip address
+
+ shutdown
+
+!
+
+interface Ethernet1/1
+
+ no ip address
+
+ shutdown
+
+!
+
+interface Ethernet1/2
+
+ no ip address
+
+ shutdown
+
+!
+
+interface Ethernet1/3
+
+ no ip address
+
+ shutdown
+
+!
+
+interface Serial2/0
+
+ no ip address
+
+ shutdown
+
+ serial restart-delay 0
+
+!
+
+interface Serial2/1
+
+ no ip address
+
+ shutdown
+
+ serial restart-delay 0
+
+!
+
+interface Serial2/2
+
+ no ip address
+
+ shutdown
+
+ serial restart-delay 0
+
+!
+
+interface Serial2/3
+
+ no ip address
+
+ shutdown
+
+ serial restart-delay 0
+
+!
+
+interface Serial3/0
+
+ no ip address
+
+ shutdown
+
+ serial restart-delay 0
+
+!
+
+interface Serial3/1
+
+ no ip address
+
+ shutdown
+
+ serial restart-delay 0
+
+!
+
+interface Serial3/2
+
+ no ip address
+
+ shutdown
+
+ serial restart-delay 0
+
+!
+
+interface Serial3/3
+
+ no ip address
+
+ shutdown
+
+ serial restart-delay 0
+
+!
+
+router ospf 1
+
+ router-id 0.0.0.1
+
+!
+
+router bgp 65000
+
+ bgp log-neighbor-changes
+
+ !
+
+ scope global
+
+  neighbor 0.0.0.2 remote-as 65000
+
+  neighbor 0.0.0.2 update-source Loopback0
+
+  !
+
+  address-family ipv4
+
+  !
+
+  !
+
+  address-family vpnv4
+
+   neighbor 0.0.0.2 activate
+
+   neighbor 0.0.0.2 send-community extended
+
+  !
+
+ !
+
+ !
+
+ scope vrf CHEMICAL
+
+  !
+
+  address-family ipv4
+
+   redistribute connected
+
+  !
+
+ !
+
+ !
+
+ scope vrf CHEM_MGMT
+
+  !
+
+  address-family ipv4
+
+   redistribute connected
+
+  !
+
+ !
+
+ !
+
+ scope vrf POLICE
+
+  !
+
+  address-family ipv4
+
+   redistribute connected
+
+  !
+
+ !
+
+!
+
+ip forward-protocol nd
+
+!
+
+!
+
+no ip http server
+
+no ip http secure-server
+
+!
+
+!
+
+!
+
+mpls ldp router-id Loopback0
+
+!
+
+control-plane
+
+!
+
+!
+
+!
+
+!
+
+!
+
+!
+
+!
+
+!
+
+line con 0
+
+ exec-timeout 0 0
+
+ privilege level 15
+
+ logging synchronous
+
+line aux 0
+
+ exec-timeout 0 0
+
+ privilege level 15
+
+ logging synchronous
+
+line vty 0 4
+
+ exec-timeout 0 0
+
+ login local
+
+ transport input ssh
+
+!
+
+!
+
+end
+
+
+
 R11#

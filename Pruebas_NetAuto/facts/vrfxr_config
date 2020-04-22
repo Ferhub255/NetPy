@@ -1,0 +1,33 @@
+
+vrf CHEMICAL
+address-family ipv4 unicast
+import route-target
+65000:2
+!
+export route-target
+65000:2
+65000:5
+65000:3
+!
+
+vrf CHEM_MGMT
+address-family ipv4 unicast
+import route-target
+65000:2
+65000:5
+65000:3
+!
+export route-target
+65000:2
+
+!
+
+vrf POLICE
+address-family ipv4 unicast
+import route-target
+65000:2
+!
+export route-target
+65000:2
+
+!
