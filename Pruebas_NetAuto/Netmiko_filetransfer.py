@@ -3,7 +3,7 @@
 Uso de Netmiko para transferir un archivo
 """
 import time
-import sys 
+import sys
 from netmiko import Netmiko, file_transfer
 from yaml import safe_load
 
@@ -44,10 +44,9 @@ def main(argv):
             # si no lo logra devuleve None
             socket_timeout=10.0,
         )
-        
+
         print(f" Details: {result}\n")
         conn.disconnect()
-        
 
 
 if __name__ == "__main__":
