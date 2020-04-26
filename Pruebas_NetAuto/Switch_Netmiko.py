@@ -53,9 +53,11 @@ def main():
         print(f"Entramos exitosamente a {conn.find_prompt()}")
 
         # Enviamos la configuracion, delay_facto 2=1seg
-        conn.send_config_set(new_vrf_config.splitlines(), delay_factor=20, cmd_verify=False)
+        conn.send_config_set(
+            new_vrf_config.splitlines(), delay_factor=20, cmd_verify=False
+        )
         conn.disconnect()
-        #print(output)
+        # print(output)
 
 
 if __name__ == "__main__":
