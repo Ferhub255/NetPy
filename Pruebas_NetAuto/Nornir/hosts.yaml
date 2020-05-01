@@ -11,12 +11,12 @@ R1:
               route_import:
                 - "65000:1"
               route_export:
-                - "65000:1"
+                - "65000:9"
             - name: "CHEMICAL"
               description: "CHEMICAL ENGINEERING FIRM"
               rd: "65000:2"
               route_import:
-                - "65000:2"
+                - "65000:6"
               route_export:
                 - "65000:2"
             - name: "CHEM_MGM"
@@ -24,6 +24,7 @@ R1:
               rd: "65000:3"
               route_import:
                 - "65000:4"
+                - "65000:5"
               route_export:
                 - "65000:3"
 R3:
@@ -38,13 +39,13 @@ R3:
               route_import:
                 - "65000:1"
               route_export:
-                - "65000:1"
+                - "65000:9"
             - name: "CHEMICAL"
               description: "CHEMICAL ENGINEERING FIRM"
               rd: "65000:2"
               route_import:
                 - "65000:2"
-                - "65000:3"
+                - "65000:7"
               route_export:
                 - "65000:2"
                 - "65000:4"
