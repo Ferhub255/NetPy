@@ -1,0 +1,20 @@
+{
+  "uptime": 28380,
+  "vendor": "Cisco",
+  "os_version": "Virtual XE Software (X86_64_LINUX_IOSD-UNIVERSALK9-M), Version 16.8.1a, RELEASE SOFTWARE (fc1)",
+  "serial_number": "9HQBHM4Q4U5",
+  "model": "CSR1000V",
+  "hostname": "R1",
+  "fqdn": "R1.home.lab",
+  "interface_list": [
+    "GigabitEthernet1",
+    "GigabitEthernet2",
+    "GigabitEthernet3",
+    "GigabitEthernet4",
+    "Loopback0",
+    "Loopback1",
+    "Loopback2",
+    "Loopback3",
+    "Tunnel13"
+  ]
+}
