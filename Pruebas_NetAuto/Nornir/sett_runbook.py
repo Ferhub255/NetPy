@@ -39,7 +39,7 @@ def manage_rt(task):
     task3_result = task.run(
         task = template_file,
         template = f"{task.host.platform}_vpn.j2",
-        path = "templaes",
+        path = "templates",
         data = rt_updates
     )
     new_vrf_config = task3_result[0].result
