@@ -14,7 +14,7 @@ vrf:
         - "65000:2"
       route_export:
         - "65000:2"
-    - name: "CHEM MGM"
+    - name: "CHEM_MGM"
       description: "CHEMICAL ENGINEERING MANAGER"
       rd: "65000:3"
       route_import:

@@ -51,10 +51,11 @@ def main():
             global_delay_factor=2,
         )
         print(f"Entramos exitosamente a {conn.find_prompt()}")
-
+        print(new_vrf_config)
+        print("*"*50)
         # Enviamos la configuracion, delay_facto 2=1seg
         conn.send_config_set(
-            new_vrf_config.splitlines(), delay_factor=20, cmd_verify=False
+            new_vrf_config.splitlines(), delay_factor=10, cmd_verify=False
         )
         conn.disconnect()
         # print(output)

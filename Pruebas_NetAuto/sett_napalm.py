@@ -20,7 +20,7 @@ def main():
         conn.open()
         facts = conn.get_facts()
         print(facts)
-        print(f"{facts['name']} model type: {facts['model']}")
+        print(f"{facts['hostname']} model type: {facts['model']}")
 
         # Determine the parser, run the proper show command, and perform parsing
         # NAPALM has open issue to obviate need for parser
