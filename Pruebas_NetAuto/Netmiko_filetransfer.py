@@ -2,8 +2,9 @@
 """
 Uso de Netmiko para transferir un archivo
 """
-import time
+#import time
 import sys
+import os
 from netmiko import Netmiko, file_transfer
 from yaml import safe_load
 
@@ -51,4 +52,10 @@ def main(argv):
 
 if __name__ == "__main__":
     # le pasamos el archivo como un argumento
+    if len(sys.argv) != 2:
+        print(f"usage: python {sys.argv[0]} <file_to_upload>")
+        sys.exit(1)
+    if not os.path.isfile(sys.argv[1]):
+        print(f"Error: file '{sys.argv[1]}' not found")
+        sys.exit(2)
     main(sys.argv)
