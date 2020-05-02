@@ -30,8 +30,8 @@ def main(argv):
             username="admin",
             password="admin",
             device_type=platform,
-            #secret="cisco",
-            #global_delay_factor=2,
+            # secret="cisco",
+            # global_delay_factor=2,
         )
         print(f"Entramos exitosamente a {conn.find_prompt()}")
         print(f" Uploading {argv[1]}...")
@@ -42,7 +42,7 @@ def main(argv):
             file_system=host.get("file_system"),
             # la funcion get va a tratar de buscar el key file_systme
             # si no lo logra devuleve None
-            #dsocket_timeout=10.0,
+            # dsocket_timeout=10.0,
         )
 
         print(f" Details: {result}\n")
